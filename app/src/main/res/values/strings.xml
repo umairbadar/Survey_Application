@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Survey Application</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="pin">Pin</string>
+    <string name="new_to_the_app_register_now">New to the app? Register Now.</string>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="confirm_pin">Confirm Pin</string>
+    <string name="register">Register</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="next">Next</string>
+</resources>
