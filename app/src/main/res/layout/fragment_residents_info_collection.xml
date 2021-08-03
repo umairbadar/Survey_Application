@@ -119,7 +119,7 @@
                     android:id="@+id/et_mobile_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:inputType="phone"
                     android:digits="0123456789"
                     android:maxLength="11" />
@@ -178,7 +178,7 @@
                     android:id="@+id/et_age_in_years"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:digits="0123456789"
                     android:maxLength="3" />
@@ -255,6 +255,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:hint="@string/children">
 
                 <com.google.android.material.textfield.TextInputEditText

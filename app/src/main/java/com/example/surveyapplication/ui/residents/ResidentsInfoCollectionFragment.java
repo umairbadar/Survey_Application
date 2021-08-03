@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -89,6 +90,15 @@ public class ResidentsInfoCollectionFragment extends Fragment implements View.On
             district_id = getArguments().getInt("district_id");
             tehsil_id = getArguments().getInt("tehsil_id");
         }
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.nav_residents_list, true).build();
+                navController.navigate(R.id.action_nav_residents_info_collection_to_nav_residents_list, null, navOptions);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -129,17 +139,8 @@ public class ResidentsInfoCollectionFragment extends Fragment implements View.On
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedMaritalStatusID = maritalStatusID.get(i);
-                if (selectedGenderID == 2) {
-                    if (selectedMaritalStatusID == 2 || selectedMaritalStatusID == 3 || selectedMaritalStatusID == 4)
-                        binding.layoutPregnant.setVisibility(View.VISIBLE);
-                    else {
-                        if (binding.layoutPregnant.getVisibility() == View.VISIBLE)
-                            binding.layoutPregnant.setVisibility(View.GONE);
-                    }
-                } else {
-                    if (binding.layoutPregnant.getVisibility() == View.VISIBLE)
-                        binding.layoutPregnant.setVisibility(View.GONE);
-                }
+                binding.layoutPregnant.setVisibility((selectedGenderID == 2 && (selectedMaritalStatusID == 2 || selectedMaritalStatusID == 3 || selectedMaritalStatusID == 4)) ? View.VISIBLE : View.GONE);
+                binding.layoutChildren.setVisibility((selectedMaritalStatusID != 1 && selectedMaritalStatusID != 0) ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -851,7 +852,7 @@ public class ResidentsInfoCollectionFragment extends Fragment implements View.On
             binding.layoutEducation.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
         } else if (binding.spnOccupation.getSelectedItemPosition() == 0) {
             binding.layoutOccupation.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
-        } else if (children.isEmpty()) {
+        } else if (binding.layoutChildren.getVisibility() == View.VISIBLE && children.isEmpty()) {
             binding.layoutChildren.setErrorEnabled(true);
             binding.layoutChildren.setError("Enter no. of Children");
             binding.layoutChildren.requestFocus();
@@ -871,7 +872,7 @@ public class ResidentsInfoCollectionFragment extends Fragment implements View.On
                     selectedMaritalStatusID,
                     selectedEducationID,
                     selectedOccupationID,
-                    Integer.parseInt(children),
+                    children.isEmpty() ? 0 : Integer.parseInt(children),
                     selectedPregnantID
             );
         }

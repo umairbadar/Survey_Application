@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,11 +36,11 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
 
     private List<String> district;
     private List<Integer> districtID;
-    private int selectedDistrictID;
+    private int selectedDistrictID = 0;
 
     private List<String> tehsils;
     private List<Integer> tehsilsID;
-    private int selectedTehsilsID;
+    private int selectedTehsilsID = 0;
 
     private NavController navController;
 
@@ -79,6 +80,26 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedProvinceID = provinceID.get(i);
+                if (selectedProvinceID == 1 || selectedProvinceID == 2) {
+                    if (binding.layoutDistrict.getVisibility() != View.VISIBLE)
+                        binding.layoutDistrict.setVisibility(View.VISIBLE);
+
+                    getDistrict(selectedProvinceID);
+                } else {
+                    if (binding.layoutDistrict.getVisibility() == View.VISIBLE)
+                        binding.layoutDistrict.setVisibility(View.GONE);
+
+                    if (binding.layoutTehsils.getVisibility() == View.VISIBLE)
+                        binding.layoutTehsils.setVisibility(View.GONE);
+
+                    selectedDistrictID = 0;
+                    selectedTehsilsID = 0;
+
+                    if (selectedProvinceID != 0)
+                        Toast.makeText(requireContext(), "No districts found for selected province!",
+                                Toast.LENGTH_LONG).show();
+                }
+
             }
 
             @Override
@@ -111,7 +132,7 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
                     if (binding.layoutTehsils.getVisibility() != View.VISIBLE)
                         binding.layoutTehsils.setVisibility(View.VISIBLE);
 
-                    getTehsils(i);
+                    getTehsils(district.get(i));
 
                 } else {
                     if (binding.layoutTehsils.getVisibility() == View.VISIBLE)
@@ -124,7 +145,6 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
 
             }
         });
-        getDistrict();
 
         tehsilsID = new ArrayList<>();
         tehsils = new ArrayList<>();
@@ -208,7 +228,7 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
         binding.spnProvince.setAdapter(dataAdapter);
     }
 
-    private void getDistrict() {
+    private void getDistrict(int province_id) {
 
         if (districtID.size() > 0) {
             districtID.clear();
@@ -221,11 +241,13 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
         districtID.add(0);
         district.add("Select District");
 
-        districtID.add(1);
-        district.add("Karachi");
-
-        districtID.add(2);
-        district.add("Lahore");
+        if (province_id == 1) {
+            districtID.add(1);
+            district.add("Karachi");
+        } else if (province_id == 2) {
+            districtID.add(2);
+            district.add("Lahore");
+        }
 
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(requireContext(),
@@ -254,7 +276,7 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
         binding.spnDistrict.setAdapter(dataAdapter);
     }
 
-    private void getTehsils(int district_id) {
+    private void getTehsils(String district) {
 
         if (tehsilsID.size() > 0) {
             tehsilsID.clear();
@@ -267,7 +289,7 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
         tehsilsID.add(0);
         tehsils.add("Select Tehsils");
 
-        if (district_id == 1) {
+        if (district.equals("Karachi")) {
             //Tehsils of Karachi to be populated in Spinner...
 
             tehsilsID.add(11);
@@ -327,7 +349,6 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
             tehsils.add("Nishtar");
         }
 
-
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(requireContext(),
                 R.layout.item_spinner, tehsils) {
             @Override
@@ -361,16 +382,20 @@ public class SurveyLocalityFragment extends Fragment implements View.OnClickList
 
             if (selectedProvinceID == 0) {
                 binding.layoutProvince.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
-            } else if (selectedDistrictID == 0) {
+            } else if (binding.layoutDistrict.getVisibility() == View.VISIBLE && selectedDistrictID == 0) {
                 binding.layoutDistrict.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
-            } else if (selectedTehsilsID == 0) {
+            } else if (binding.layoutTehsils.getVisibility() == View.VISIBLE && selectedTehsilsID == 0) {
                 binding.layoutTehsils.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
+            } else if (selectedDistrictID == 0 && selectedTehsilsID == 0) {
+                Toast.makeText(requireContext(), "No districts & tehsils found for selected province!",
+                        Toast.LENGTH_LONG).show();
             } else {
                 Bundle args = new Bundle();
                 args.putInt("province_id", selectedProvinceID);
                 args.putInt("district_id", selectedDistrictID);
                 args.putInt("tehsil_id", selectedTehsilsID);
                 navController.navigate(R.id.action_nav_survey_locality_to_nav_residents_info_collection, args);
+
             }
         }
     }
