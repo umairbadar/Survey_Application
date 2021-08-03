@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SurveyLocalitySelectionActivity">
-
+        tools:context=".ui.surver_locality.SurveyLocalityFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,8 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:background="@drawable/gray_border_bg">
+                android:background="@drawable/gray_border_bg"
+                android:visibility="gone">
 
                 <Spinner
                     android:id="@+id/spn_tehsils"
@@ -89,7 +87,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:onClick="onClick"
                 android:text="@string/next"
                 android:textAllCaps="false" />
 

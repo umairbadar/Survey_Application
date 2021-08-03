@@ -1,6 +1,7 @@
 package com.example.surveyapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,15 +39,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().startsWith("03")) {
-                    loginBinding.layoutPhoneNumber.setErrorEnabled(true);
-                    loginBinding.layoutPhoneNumber.setError("Enter Valid Phone Number (03441234567)");
-                    loginBinding.layoutPhoneNumber.requestFocus();
-                } else if (s.length() >= 2 && s.toString().startsWith("03") && s.length() < 11) {
-                    loginBinding.layoutPhoneNumber.setErrorEnabled(true);
-                    loginBinding.layoutPhoneNumber.setError("Phone Number must be 11 digits long");
-                    loginBinding.layoutPhoneNumber.requestFocus();
-                }
             }
         });
 
@@ -63,11 +55,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() < 4) {
-                    loginBinding.layoutPin.setErrorEnabled(true);
-                    loginBinding.layoutPin.setError("Pin Must be 4 digits long");
-                    loginBinding.layoutPin.requestFocus();
-                }
             }
         });
     }
@@ -79,16 +66,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (usersDAO.checkAlreadyExists(phone_number) > 0) {
                 Users user = usersDAO.getUserDetails(phone_number);
                 if (user.getPhone_number().equals(phone_number) && user.getPin() == pin) {
-                    if (user.getDistrict_id() == 0 && user.getProvince_id() == 0 && user.getTehsils_id() == 0) {
-                        Intent intent = new Intent(this, SurveyLocalitySelectionActivity.class);
-                        intent.putExtra("id", user.getId());
-                        intent.putExtra("phone", user.getPhone_number());
-                        startActivity(intent);
-                    } else {
-                        //skipping the locality selection screen...
-                        Toast.makeText(this, "Skip",
-                                Toast.LENGTH_LONG).show();
-                    }
+                    //Updating user phone number in sharedPref...
+                    SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("phone", phone_number);
+                    editor.apply();
+
+                    //Updating logged in status in db, so that user don't need to login again n again..
+                    usersDAO.updateLoggedInStatus(1, phone_number);
+
+                    //Opening main activity...
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this, "Invalid credentials.",
                             Toast.LENGTH_LONG).show();

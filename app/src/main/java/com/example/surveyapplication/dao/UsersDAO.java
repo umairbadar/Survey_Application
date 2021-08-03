@@ -28,4 +28,7 @@ public interface UsersDAO {
 
     @Query("SELECT * from users WHERE phone_number =:phone_number")
     Users getUserDetails(String phone_number);
+
+    @Query("UPDATE users SET logged_in_status =:logged_in_status WHERE phone_number =:phone_number")
+    void updateLoggedInStatus(int logged_in_status, String phone_number);
 }

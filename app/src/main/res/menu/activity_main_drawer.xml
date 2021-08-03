@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_residents_list"
+            android:title="@string/menu_nav_residents_list" />
+        <item
+            android:id="@+id/nav_survey_locality"
+            android:title="@string/menu_residents_info_collection" />
+        <item
+            android:id="@+id/nav_summary"
+            android:title="@string/menu_summary" />
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/menu_logout" />
+    </group>
+</menu>

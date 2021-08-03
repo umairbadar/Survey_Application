@@ -37,11 +37,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
-                    signupBinding.layoutName.setErrorEnabled(true);
-                    signupBinding.layoutName.setError("Enter Name");
-                    signupBinding.layoutName.requestFocus();
-                }
             }
         });
 
@@ -58,15 +53,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().startsWith("03")) {
-                    signupBinding.layoutPhoneNumber.setErrorEnabled(true);
-                    signupBinding.layoutPhoneNumber.setError("Enter Valid Phone Number (03441234567)");
-                    signupBinding.layoutPhoneNumber.requestFocus();
-                } else if (s.length() >= 2 && s.toString().startsWith("03") && s.length() < 11) {
-                    signupBinding.layoutPhoneNumber.setErrorEnabled(true);
-                    signupBinding.layoutPhoneNumber.setError("Phone Number must be 11 digits long");
-                    signupBinding.layoutPhoneNumber.requestFocus();
-                }
             }
         });
 
@@ -83,11 +69,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() < 4) {
-                    signupBinding.layoutPin.setErrorEnabled(true);
-                    signupBinding.layoutPin.setError("Pin Must be 4 digits long");
-                    signupBinding.layoutPin.requestFocus();
-                }
             }
         });
 
@@ -104,15 +85,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() < 4) {
-                    signupBinding.layoutConfirmPin.setErrorEnabled(true);
-                    signupBinding.layoutConfirmPin.setError("Confirm Pin Must be 4 digits long");
-                    signupBinding.layoutConfirmPin.requestFocus();
-                } else if (s.length() == 4 && signupBinding.etPin.getText() != null && !s.toString().equals(signupBinding.etPin.getText().toString())) {
-                    signupBinding.layoutConfirmPin.setErrorEnabled(true);
-                    signupBinding.layoutConfirmPin.setError("Pin & Confirm Pin must be same");
-                    signupBinding.layoutConfirmPin.requestFocus();
-                }
             }
         });
     }

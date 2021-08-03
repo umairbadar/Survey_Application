@@ -10,8 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SurveyApplication">
         <activity
-            android:name=".SurveyLocalitySelectionActivity"
-            android:screenOrientation="portrait" />
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SurveyApplication.NoActionBar" />
         <activity
             android:name=".SignupActivity"
             android:screenOrientation="portrait" />

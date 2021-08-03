@@ -9,9 +9,7 @@ public class Users {
     private int id;
     private String name, phone_number;
     private int pin;
-    private int province_id;
-    private int district_id;
-    private int tehsils_id;
+    private int logged_in_status;
 
     public int getId() {
         return id;
@@ -45,27 +43,11 @@ public class Users {
         this.pin = pin;
     }
 
-    public int getProvince_id() {
-        return province_id;
+    public int getLogged_in_status() {
+        return logged_in_status;
     }
 
-    public void setProvince_id(int province_id) {
-        this.province_id = province_id;
-    }
-
-    public int getDistrict_id() {
-        return district_id;
-    }
-
-    public void setDistrict_id(int district_id) {
-        this.district_id = district_id;
-    }
-
-    public int getTehsils_id() {
-        return tehsils_id;
-    }
-
-    public void setTehsils_id(int tehsils_id) {
-        this.tehsils_id = tehsils_id;
+    public void setLogged_in_status(int logged_in_status) {
+        this.logged_in_status = logged_in_status;
     }
 }

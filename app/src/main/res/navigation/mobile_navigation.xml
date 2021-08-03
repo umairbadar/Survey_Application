@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_residents_list">
+
+    <fragment
+        android:id="@+id/nav_residents_list"
+        android:name="com.example.surveyapplication.ui.residents.ResidentsListFragment"
+        android:label="@string/menu_nav_residents_list"
+        tools:layout="@layout/fragment_residents_list" />
+
+    <fragment
+        android:id="@+id/nav_residents_info_collection"
+        android:name="com.example.surveyapplication.ui.residents.ResidentsInfoCollectionFragment"
+        android:label="@string/menu_residents_info_collection"
+        tools:layout="@layout/fragment_residents_info_collection">
+        <action
+            android:id="@+id/action_nav_residents_info_collection_to_nav_residents_list"
+            app:destination="@id/nav_residents_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_summary"
+        android:name="com.example.surveyapplication.ui.summary.SummaryFragment"
+        android:label="@string/menu_summary"
+        tools:layout="@layout/fragment_summary" />
+
+    <fragment
+        android:id="@+id/nav_survey_locality"
+        android:name="com.example.surveyapplication.ui.surver_locality.SurveyLocalityFragment"
+        android:label="@string/menu_survey_locality"
+        tools:layout="@layout/fragment_survey_locality">
+        <action
+            android:id="@+id/action_nav_survey_locality_to_nav_residents_info_collection"
+            app:destination="@id/nav_residents_info_collection" />
+    </fragment>
+</navigation>

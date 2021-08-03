@@ -1,29 +1,33 @@
-package com.example.surveyapplication;
+package com.example.surveyapplication.ui.surver_locality;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
-import com.example.surveyapplication.dao.UsersDAO;
-import com.example.surveyapplication.databinding.ActivitySurveyLocalitySelectionBinding;
-import com.example.surveyapplication.models.Users;
+import com.example.surveyapplication.R;
+import com.example.surveyapplication.databinding.FragmentSurveyLocalityBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyLocalitySelectionActivity extends AppCompatActivity implements View.OnClickListener {
+public class SurveyLocalityFragment extends Fragment implements View.OnClickListener {
 
-    private ActivitySurveyLocalitySelectionBinding localitySelectionBinding;
+    private FragmentSurveyLocalityBinding binding;
 
     private List<String> provinces;
     private List<Integer> provinceID;
@@ -37,25 +41,31 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
     private List<Integer> tehsilsID;
     private int selectedTehsilsID;
 
-    private int user_id;
-    private String phone;
+    private NavController navController;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        user_id = getIntent().getIntExtra("id", 0);
-        phone = getIntent().getStringExtra("phone");
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_survey_locality, container, false);
+        return binding.getRoot();
+    }
 
-        localitySelectionBinding = ActivitySurveyLocalitySelectionBinding.inflate(getLayoutInflater());
-        setContentView(localitySelectionBinding.getRoot());
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        navController = Navigation.findNavController(view);
 
         provinceID = new ArrayList<>();
         provinces = new ArrayList<>();
-        localitySelectionBinding.spnProvince.setOnTouchListener((view1, motionEvent) -> {
+        binding.spnProvince.setOnTouchListener((view1, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    localitySelectionBinding.layoutProvince.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_border_bg));
+                    binding.layoutProvince.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.gray_border_bg));
                     break;
                 case MotionEvent.ACTION_UP:
                     view1.performClick();
@@ -65,7 +75,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
             }
             return true;
         });
-        localitySelectionBinding.spnProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spnProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedProvinceID = provinceID.get(i);
@@ -80,10 +90,10 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
 
         districtID = new ArrayList<>();
         district = new ArrayList<>();
-        localitySelectionBinding.spnDistrict.setOnTouchListener((view1, motionEvent) -> {
+        binding.spnDistrict.setOnTouchListener((view1, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    localitySelectionBinding.layoutDistrict.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_border_bg));
+                    binding.layoutDistrict.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.gray_border_bg));
                     break;
                 case MotionEvent.ACTION_UP:
                     view1.performClick();
@@ -93,19 +103,19 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
             }
             return true;
         });
-        localitySelectionBinding.spnDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spnDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedDistrictID = districtID.get(i);
                 if (i != 0) {
-                    if (localitySelectionBinding.layoutTehsils.getVisibility() != View.VISIBLE)
-                        localitySelectionBinding.layoutTehsils.setVisibility(View.VISIBLE);
+                    if (binding.layoutTehsils.getVisibility() != View.VISIBLE)
+                        binding.layoutTehsils.setVisibility(View.VISIBLE);
 
                     getTehsils(i);
 
                 } else {
-                    if (localitySelectionBinding.layoutTehsils.getVisibility() == View.VISIBLE)
-                        localitySelectionBinding.layoutTehsils.setVisibility(View.GONE);
+                    if (binding.layoutTehsils.getVisibility() == View.VISIBLE)
+                        binding.layoutTehsils.setVisibility(View.GONE);
                 }
             }
 
@@ -118,10 +128,10 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
 
         tehsilsID = new ArrayList<>();
         tehsils = new ArrayList<>();
-        localitySelectionBinding.spnTehsils.setOnTouchListener((view1, motionEvent) -> {
+        binding.spnTehsils.setOnTouchListener((view1, motionEvent) -> {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    localitySelectionBinding.layoutTehsils.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_border_bg));
+                    binding.layoutTehsils.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.gray_border_bg));
                     break;
                 case MotionEvent.ACTION_UP:
                     view1.performClick();
@@ -131,7 +141,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
             }
             return true;
         });
-        localitySelectionBinding.spnTehsils.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spnTehsils.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedTehsilsID = tehsilsID.get(i);
@@ -143,6 +153,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
             }
         });
 
+        binding.btnNext.setOnClickListener(this);
     }
 
     private void getProvinces() {
@@ -171,7 +182,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         provinces.add("Baluchistan");
 
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(requireContext(),
                 R.layout.item_spinner, provinces) {
             @Override
             public boolean isEnabled(int position) {
@@ -194,7 +205,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         };
 
         dataAdapter.setDropDownViewResource(R.layout.item_spinner);
-        localitySelectionBinding.spnProvince.setAdapter(dataAdapter);
+        binding.spnProvince.setAdapter(dataAdapter);
     }
 
     private void getDistrict() {
@@ -217,7 +228,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         district.add("Lahore");
 
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(requireContext(),
                 R.layout.item_spinner, district) {
             @Override
             public boolean isEnabled(int position) {
@@ -240,7 +251,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         };
 
         dataAdapter.setDropDownViewResource(R.layout.item_spinner);
-        localitySelectionBinding.spnDistrict.setAdapter(dataAdapter);
+        binding.spnDistrict.setAdapter(dataAdapter);
     }
 
     private void getTehsils(int district_id) {
@@ -317,7 +328,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         }
 
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(requireContext(),
                 R.layout.item_spinner, tehsils) {
             @Override
             public boolean isEnabled(int position) {
@@ -340,26 +351,7 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         };
 
         dataAdapter.setDropDownViewResource(R.layout.item_spinner);
-        localitySelectionBinding.spnTehsils.setAdapter(dataAdapter);
-    }
-
-    private void updateUserDetails(int selectedProvinceID, int selectedDistrictID, int selectedTehsilsID) {
-        AppDatabase database = AppDatabase.getAppDatabase(this);
-        UsersDAO usersDAO = database.getUsersDAO();
-        if (user_id != 0) {
-            Users user = usersDAO.getUserDetails(phone);
-            user.setId(user.getId());
-            user.setName(user.getName());
-            user.setPhone_number(user.getPhone_number());
-            user.setPin(user.getPin());
-            user.setProvince_id(selectedProvinceID);
-            user.setDistrict_id(selectedDistrictID);
-            user.setTehsils_id(selectedTehsilsID);
-            usersDAO.update(user);
-        } else {
-            Toast.makeText(this, "user id is null",
-                    Toast.LENGTH_LONG).show();
-        }
+        binding.spnTehsils.setAdapter(dataAdapter);
     }
 
     @Override
@@ -368,17 +360,17 @@ public class SurveyLocalitySelectionActivity extends AppCompatActivity implement
         if (v.getId() == R.id.btn_next) {
 
             if (selectedProvinceID == 0) {
-                localitySelectionBinding.layoutProvince.setBackground(ContextCompat.getDrawable(this, R.drawable.red_border_bg));
+                binding.layoutProvince.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
             } else if (selectedDistrictID == 0) {
-                localitySelectionBinding.layoutDistrict.setBackground(ContextCompat.getDrawable(this, R.drawable.red_border_bg));
+                binding.layoutDistrict.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
             } else if (selectedTehsilsID == 0) {
-                localitySelectionBinding.layoutTehsils.setBackground(ContextCompat.getDrawable(this, R.drawable.red_border_bg));
+                binding.layoutTehsils.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.red_border_bg));
             } else {
-                updateUserDetails(
-                        selectedProvinceID,
-                        selectedDistrictID,
-                        selectedTehsilsID
-                );
+                Bundle args = new Bundle();
+                args.putInt("province_id", selectedProvinceID);
+                args.putInt("district_id", selectedDistrictID);
+                args.putInt("tehsil_id", selectedTehsilsID);
+                navController.navigate(R.id.action_nav_survey_locality_to_nav_residents_info_collection, args);
             }
         }
     }
