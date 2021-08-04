@@ -1,7 +1,6 @@
 package com.example.surveyapplication.ui.residents;
 
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -41,7 +40,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 
 public class ResidentsInfoCollectionFragment extends Fragment implements View.OnClickListener {
 
@@ -70,8 +68,6 @@ public class ResidentsInfoCollectionFragment extends Fragment implements View.On
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener dateOfBirth;
 
-    private String phone;
-
     private NavController navController;
 
     private int province_id;
@@ -81,9 +77,6 @@ public class ResidentsInfoCollectionFragment extends Fragment implements View.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("data", MODE_PRIVATE);
-        phone = sharedPreferences.getString("phone", "");
 
         if (getArguments() != null) {
             province_id = getArguments().getInt("province_id");
